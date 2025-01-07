@@ -1,6 +1,7 @@
 import * as THREE from '../lib/three.module.js';
 import { OrbitControls } from '../lib/OrbitControls.js';
 import { ParticleSystem } from './effects.js';
+import { orbVertexShader, orbFragmentShader } from './shaders/orb.js';
 
 export class Scene {
     constructor() {
@@ -64,13 +65,18 @@ export class Scene {
 
     createOrb() {
         const geometry = new THREE.SphereGeometry(2, 64, 64);
-        const material = new THREE.MeshPhongMaterial({
-            color: 0x000000,
-            emissive: 0x6600ff,
-            specular: 0xffffff,
-            shininess: 100,
+        const uniforms = {
+            time: { value: 0 },
+            color1: { value: new THREE.Color(0x6600ff) },
+            color2: { value: new THREE.Color(0x00ffff) }
+        };
+
+        const material = new THREE.ShaderMaterial({
+            uniforms: uniforms,
+            vertexShader: orbVertexShader,
+            fragmentShader: orbFragmentShader,
             transparent: true,
-            opacity: 0.9
+            side: THREE.DoubleSide
         });
 
         this.orb = new THREE.Mesh(geometry, material);
@@ -84,7 +90,9 @@ export class Scene {
 
     animate() {
         requestAnimationFrame(() => this.animate());
-        this.time += 1;
+        this.time += 0.016; // Approximately 60 FPS
+        // Update shader uniforms
+        this.orb.material.uniforms.time.value = this.time;
 
         this.orb.rotation.x += 0.005;
         this.orb.rotation.y += 0.005;

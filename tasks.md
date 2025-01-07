@@ -20,7 +20,7 @@
 - [x] Basic sphere geometry
 - [x] Basic material with transparency
 - [x] Simple rotation animation
-- [ ] Custom shaders for surface effects
+- [x] Custom shaders for surface effects
 - [ ] Dynamic texture mapping
 - [ ] Internal energy swirls/patterns
 - [ ] Pulsating glow effect
